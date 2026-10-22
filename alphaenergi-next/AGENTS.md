@@ -4,7 +4,7 @@ Single-page site for AlphaEnergi (Miami, FL): Next.js 15 (App Router) + React 19
 
 ## Hard rules
 
-1. **No component may contain a visible string.** Every string is a key in `src/lib/content.ts`; components read the key. Render exactly the strings defined there and no others.
+1. **No component may contain a visible string.** Every string is a key in `src/lib/content.ts` (each one in `es` and `en`); components read it through `useI18n().t`. Render exactly the strings defined there and no others.
 2. **No component may contain an asset URL or path.** Everything goes through `MEDIA` in `content.ts`. The one exception is `PILL_MASK` (a `data:` URI in `src/lib/assets.ts`): it is consumed via `mask-image` and Chrome silently drops a cross-origin SVG mask. Do not move it into `MEDIA`.
 3. **`HeroDesktop` and `HeroMobile` share zero duplicated content.** They stay two separate, always-mounted trees toggled with `md:block` / `md:hidden` (no `matchMedia` fork, to avoid hydration mismatch), but both read `HERO` and `MEDIA`.
 4. **No hex colour outside the `@theme` block** of `src/app/globals.css`. Permitted exceptions: the Next `viewport.themeColor` (cannot take `var()`) and hex inside documentation comments.

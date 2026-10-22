@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
-import { HERO } from "@/lib/content";
+import { useI18n } from "@/lib/i18n";
 import { dw, dpy } from "@/lib/frame";
 import { EASE } from "@/lib/motion";
 import { useCountUp } from "@/lib/hooks";
@@ -10,7 +10,7 @@ import { useCountUp } from "@/lib/hooks";
 const CARD_TOP = dpy(69, 0);
 const capTop = (y: number, size: number) => dw(y - 0.25 * size);
 
-function Card({ left, delay, stat, run, reduce }: { left: number; delay: number; stat: (typeof HERO.stats)[number]; run: boolean; reduce: boolean }) {
+function Card({ left, delay, stat, run, reduce }: { left: number; delay: number; stat: { value: number; label: string }; run: boolean; reduce: boolean }) {
   const n = useCountUp(stat.value, run, reduce, 1500);
   return (
     <motion.div
@@ -24,7 +24,6 @@ function Card({ left, delay, stat, run, reduce }: { left: number; delay: number;
       <span aria-hidden className="absolute rounded-full bg-sun" style={{ left: dw(24), top: dw(26), width: dw(10), height: dw(10) }} />
       <p className="font-normalidad absolute whitespace-nowrap uppercase text-white" style={{ left: dw(24), top: capTop(52, 40), fontSize: dw(40), lineHeight: 1.2, letterSpacing: dw(-1.6) }}>
         {n}
-        {stat.suffix}
       </p>
       <p className="absolute whitespace-nowrap text-white opacity-70" style={{ left: dw(24), top: capTop(94, 16), fontSize: dw(16), lineHeight: 1.4 }}>
         {stat.label}
@@ -34,6 +33,7 @@ function Card({ left, delay, stat, run, reduce }: { left: number; delay: number;
 }
 
 export function StatCards() {
+  const HERO = useI18n().t.hero;
   const reduce = useReducedMotion() ?? false;
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-10%" });

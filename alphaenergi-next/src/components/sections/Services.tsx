@@ -1,26 +1,47 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
-import { SplitText } from "@/components/ui/SplitText";
-import { SERVICES } from "@/lib/content";
-import { riseIn, stagger } from "@/lib/motion";
+import { useMemo, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { Filters } from "@/components/ui/Filters";
+import { SectionHead } from "@/components/ui/SectionHead";
+import { useI18n } from "@/lib/i18n";
+import { EASE } from "@/lib/motion";
 
+/* Filtro con reacomodo suave (FLIP): `layout` + `popLayout` hacen que las tarjetas que quedan se muevan en vez de saltar. */
 export function Services() {
+  const { t } = useI18n();
+  const s = t.services;
   const reduce = useReducedMotion() ?? false;
+  const [filter, setFilter] = useState("all");
+  const list = useMemo(() => (filter === "all" ? s.items : s.items.filter((i) => i.tags.includes(filter))), [filter, s.items]);
+  const filterLabel = s.filters.find((f) => f.id === filter)?.label ?? "";
+
   return (
     <section id="services" className="mx-auto max-w-[1240px] px-5 py-24 lg:px-10">
-      <p className="mb-3 text-[12px] font-semibold uppercase tracking-[0.18em] text-leaf">{SERVICES.kicker}</p>
-      <SplitText text={SERVICES.title} by="letter" each={0.024} className="font-normalidad max-w-[18ch] text-[clamp(1.8rem,4.6vw,3.6rem)] uppercase leading-[1.1]" />
-      <p className="mt-4 max-w-[52ch] text-white/70">{SERVICES.lead}</p>
-      <motion.ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4" variants={stagger(reduce, 0.1, 0)} initial="hidden" whileInView="show" viewport={{ once: true, margin: "-10% 0px" }}>
-        {SERVICES.items.map((s, i) => (
-          <motion.li key={s.title} variants={riseIn(reduce, 26)} className="group rounded-[20px] border border-white/15 bg-white/[0.04] p-6 transition-colors duration-500 hover:bg-white/[0.09]">
-            <span className="font-normalidad text-sun">{String(i + 1).padStart(2, "0")}</span>
-            <h3 className="mt-6 text-lg font-bold">{s.title}</h3>
-            <p className="mt-2 text-sm text-white/70">{s.body}</p>
-          </motion.li>
-        ))}
+      <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+        <SectionHead kicker={s.kicker} title={s.title} lead={s.lead} />
+        <Filters label={s.filterLabel} items={s.filters} value={filter} onChange={setFilter} />
+      </div>
+      <motion.ul layout={!reduce} className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <AnimatePresence mode="popLayout" initial={false}>
+          {list.map((it, i) => (
+            <motion.li
+              key={it.title}
+              layout={!reduce}
+              initial={{ opacity: 0, y: 26, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -14, scale: 0.98 }}
+              transition={{ duration: 0.6, ease: EASE }}
+              className="group rounded-[20px] border border-line bg-card p-6 transition-colors duration-500 hover:border-sun"
+            >
+              <span className="font-normalidad text-accent">{String(i + 1).padStart(2, "0")}</span>
+              <h3 className="mt-6 text-lg font-bold">{it.title}</h3>
+              <p className="mt-2 text-sm text-muted">{it.body}</p>
+            </motion.li>
+          ))}
+        </AnimatePresence>
       </motion.ul>
+      <p className="sr-only" aria-live="polite">{s.announce(list.length, filterLabel)}</p>
     </section>
   );
 }

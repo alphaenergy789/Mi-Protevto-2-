@@ -2,19 +2,58 @@
 
 /* ═════ COLORES Y TIPOGRAFÍAS: lo único que se toca acá es este bloque ═════ */
 @theme {
+  /* Marca (iguales en claro y oscuro) */
   --color-sky: #2a74e6;
   --color-deep: #0b3a9e;
   --color-slate: #1a2f5c;
   --color-haze: #e8f1ff;
   --color-ink: #06101f;
-  --color-abyss: #03070f;
   --color-sun: #ff8a1f;
   --color-leaf: #4bc925;
+  --color-sun-hi: #ff9a2e;
+  --color-sun-hot: #ff5a14;
+  --color-on-sun: #1c0a02;
+  --color-gold: #ffc15e;
+  --color-gold-soft: #ffd27a;
+  --color-arc: #6fb4ff;
 
   --font-display: var(--font-anybody), "Anybody", "Helvetica Neue", Arial, sans-serif;
   --font-sans: var(--font-figtree), "Figtree", "Helvetica Neue", Arial, sans-serif;
 
   --ease-brand: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Colores que cambian con el tema claro/oscuro. Claro por defecto; oscuro con el sistema o con el botón. */
+:root {
+  color-scheme: light;
+  --bg: #f4f7fb; --bg-2: #e6eefb; --fg: #0c1624; --muted: #52607a; --card: #ffffff; --line: rgba(12, 22, 36, 0.12);
+  --accent: #d9560a; --accent-2: #2a8f10;
+  --hero-a: #ffffff; --hero-b: #dbe9ff; --hero-c: #2a74e6; --hero-d: #0b3a9e; --hero-type: #0b2a6b;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #05080d; --bg-2: #03070f; --fg: #f1f5fa; --muted: #93a1b5; --card: #0d141d; --line: rgba(255, 255, 255, 0.1);
+    --accent: #ff8a1f; --accent-2: #4bc925;
+    --hero-a: #0b1a3a; --hero-b: #0f3b94; --hero-c: #0b3a9e; --hero-d: #051432; --hero-type: #ffffff;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #05080d; --bg-2: #03070f; --fg: #f1f5fa; --muted: #93a1b5; --card: #0d141d; --line: rgba(255, 255, 255, 0.1);
+  --accent: #ff8a1f; --accent-2: #4bc925;
+  --hero-a: #0b1a3a; --hero-b: #0f3b94; --hero-c: #0b3a9e; --hero-d: #051432; --hero-type: #ffffff;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-card: var(--card);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent2: var(--accent-2);
+  --color-hero-type: var(--hero-type);
 }
 
 .frame { container-type: size; container-name: frame; }
@@ -25,10 +64,16 @@
 .font-normalidad-black { font-family: var(--font-display); font-weight: 700; font-stretch: 150%; font-variation-settings: "wdth" 150; }
 
 html { scroll-behavior: smooth; scroll-padding-top: 88px; -webkit-text-size-adjust: 100%; }
-body { background: var(--color-ink); color: #fff; font-family: var(--font-sans); -webkit-font-smoothing: antialiased; overflow-x: clip; }
-::selection { background: #fff; color: var(--color-deep); }
+body { background: var(--bg); color: var(--fg); transition: background-color 250ms ease, color 250ms ease; font-family: var(--font-sans); -webkit-font-smoothing: antialiased; overflow-x: clip; }
+::selection { background: var(--color-sun); color: #1c0a02; }
 
 .glass { background: rgba(255, 255, 255, 0.16); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+.panel-dots { background: linear-gradient(160deg, var(--color-sky), var(--color-deep)); position: relative; isolation: isolate; }
+.panel-dots::before { content: ""; position: absolute; inset: 0; z-index: -1; background-image: radial-gradient(circle, rgba(255,255,255,0.3) 1.6px, transparent 2px); background-size: 26px 26px; mask-image: linear-gradient(120deg, transparent 15%, #000 90%); -webkit-mask-image: linear-gradient(120deg, transparent 15%, #000 90%); }
+
+@keyframes dash { to { background-position: 20px 0; } }
+@keyframes dashv { to { background-position: 0 20px; } }
+@keyframes slow { to { transform: rotate(360deg); } }
 
 .grain::after {
   content: ""; position: absolute; inset: -50%; pointer-events: none; opacity: 0.16; mix-blend-mode: overlay;
@@ -51,10 +96,19 @@ body { background: var(--color-ink); color: #fff; font-family: var(--font-sans);
 .link-underline { background-image: linear-gradient(currentColor, currentColor); background-repeat: no-repeat; background-position: 0 100%; background-size: 0% 1px; transition: background-size 0.5s var(--ease-brand); }
 .link-underline:hover, .link-underline:focus-visible { background-size: 100% 1px; }
 
-:where(a, button, input, summary, [tabindex]):focus-visible { outline: 2px solid #fff; outline-offset: 3px; border-radius: 4px; }
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible { outline: 2px solid var(--color-sun); outline-offset: 3px; border-radius: 4px; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .marquee-track, .grain::after, .flow-run { animation: none !important; }
+  .marquee-track, .grain::after, .flow-run, .flow-link, .arcs { animation: none !important; }
   *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
 }
+
+/* Enlaces animados del diagrama de flujo de energía */
+.flow-link { flex: 0 0 clamp(18px, 5vw, 64px); align-self: flex-start; margin-top: 42px; height: 3px; border-radius: 3px; background: repeating-linear-gradient(90deg, var(--color-sun) 0 8px, transparent 8px 20px); background-size: 20px 3px; animation: dash 0.9s linear infinite; }
+.flow-link.green { background-image: repeating-linear-gradient(90deg, var(--color-leaf) 0 8px, transparent 8px 20px); }
+@media (max-width: 720px) {
+  .flow-link { flex: none; width: 3px; height: 32px; margin: 0; align-self: center; background: repeating-linear-gradient(180deg, var(--color-sun) 0 8px, transparent 8px 20px); background-size: 3px 20px; animation-name: dashv; }
+  .flow-link.green { background-image: repeating-linear-gradient(180deg, var(--color-leaf) 0 8px, transparent 8px 20px); }
+}
+.arcs { animation: slow 60s linear infinite; }

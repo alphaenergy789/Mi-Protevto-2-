@@ -14,7 +14,7 @@ Este es el sitio de **AlphaEnergi** (Miami, Florida). Se edita pidiéndole los c
 | Archivo | Para qué |
 | --- | --- |
 | `src/lib/content.ts` | **Todo**: textos, imágenes, fondos, teléfono, correo, dirección y horario. |
-| `src/app/globals.css` | Los colores y las tipografías (el bloque `@theme`, arriba de todo). |
+| `src/app/globals.css` | Los colores y las tipografías: el bloque `@theme` (marca) y los bloques de tema claro/oscuro justo debajo. |
 
 Las secciones (cuáles se ven y en qué orden) están en `src/sections.ts`. Sacar una sección es poner `active: false`; no se borra la línea, así se puede volver atrás.
 
@@ -22,7 +22,7 @@ Las secciones (cuáles se ven y en qué orden) están en `src/sections.ts`. Saca
 
 1. **Un fondo.** En `content.ts`, bloque `BACKGROUNDS`. Ejemplo: dejar el hero con una foto = una sola capa `{ type: "image", src: "https://tu-foto.jpg" }`.
 2. **Un texto.** En `content.ts`, buscá la frase y cambiala entre las comillas. Cambia en computadora y celular a la vez.
-3. **Un color.** En `globals.css`, bloque `@theme`. Por ejemplo `--color-sun` es el naranja del logo. Cambiás el valor y cambia en todo el sitio.
+3. **Un color.** En `globals.css`. `--color-sun` es el naranja del logo; `--hero-a` … `--hero-d` son las cuatro paradas del degradado blanco→azul del hero. Cambiás el valor y cambia en todo el sitio.
 
 ## Comandos listos para copiar y pegar
 
@@ -45,8 +45,7 @@ Si el asistente pregunta dónde vive algo, pegale esto: **"Todo el contenido est
 - Comando que sí funciona: *"Reemplazá el título partido del hero por un solo título centrado que lea `HERO.brand`, y borrá el anillo, la barra blanca y el recorte frontal del logo."*
 - Costo: se pierde el anillo y el logo pasando por delante; el resto del sitio queda igual.
 
-**2. `--color-sky` hace dos trabajos.** Es el azul de fondo del hero y también el color de la sombra interior del anillo. Si lo cambiás, se mueven los dos.
-- Comando: *"Cambiá `--color-sky` solo como fondo del hero. Creá un token nuevo para la sombra interior del anillo y dejale el valor azul que tenía."*
+**2. Los textos están en dos idiomas.** Cada texto de `content.ts` existe en `es` y en `en`. Si cambiás uno, pedí que cambie también el otro, o la versión en inglés queda desactualizada. Comando: *"Cambiá `<texto>` en español y en inglés por `<texto nuevo>`."*
 
 **3. El hero se coloca por coordenadas.** Podés cambiar *qué* se muestra (textos, imágenes), pero *dónde* queda cada cosa no se mueve con una frase: hay que recalcular las coordenadas. Pedí cambios de posición de a uno y revisá el resultado.
 

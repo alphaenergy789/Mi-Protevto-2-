@@ -5,7 +5,8 @@ import { motion, useMotionValue, useReducedMotion, useScroll, useSpring, useTran
 import { SectionBackdrop } from "@/components/ui/SectionBackdrop";
 import { CTA } from "@/components/ui/CTA";
 import { StatCards } from "@/components/hero/StatCards";
-import { BACKGROUNDS, HERO, MEDIA } from "@/lib/content";
+import { BACKGROUNDS, MEDIA } from "@/lib/content";
+import { useI18n } from "@/lib/i18n";
 import { PILL_MASK } from "@/lib/assets";
 import { dw, dpx } from "@/lib/frame";
 import { EASE, passthrough, stagger } from "@/lib/motion";
@@ -23,6 +24,7 @@ const LS = dw(-5.2);
 const logoBox = { width: dw(340), height: dw(340) };
 
 export function HeroDesktop() {
+  const HERO = useI18n().t.hero;
   const reduce = useReducedMotion() ?? false;
   const fine = usePointerFine();
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -52,7 +54,7 @@ export function HeroDesktop() {
     hidden: reduce ? { opacity: 0 } : { opacity: 0, y: 40, ...(blur ? { filter: `blur(${dw(blur[0] * FIGMA_BLUR)})` } : null) },
     show: { opacity: 1, y: 0, ...(blur ? { filter: `blur(${dw(blur[1] * FIGMA_BLUR)})` } : null), transition: { duration: reduce ? 0.2 : 1.4, delay, ease: EASE } },
   });
-  const type = "font-normalidad absolute whitespace-nowrap uppercase text-white";
+  const type = "font-normalidad absolute whitespace-nowrap uppercase text-hero-type";
   const typeStyle = { fontSize: dw(FS), lineHeight: 1.2, letterSpacing: LS };
   const shadow = (bg: string, left: number, mx: number) => ({
     left: dw(left),
@@ -78,7 +80,7 @@ export function HeroDesktop() {
         mx.set((e.clientX - r.left) / r.width - 0.5);
         my.set((e.clientY - r.top) / r.height - 0.5);
       }}
-      className="relative isolate hidden min-h-svh w-full overflow-hidden bg-deep md:block"
+      className="relative isolate hidden min-h-svh w-full overflow-hidden md:block"
     >
       <SectionBackdrop layers={BACKGROUNDS.hero} className="-z-10" />
 
@@ -137,7 +139,7 @@ export function HeroDesktop() {
             </motion.span>
             <motion.span
               aria-hidden
-              className="absolute bg-white"
+              className="absolute bg-sun"
               style={{ left: dw(560), top: dw(300.4), width: dw(269), height: dw(21.7), transformOrigin: "right center" }}
               variants={{
                 hidden: reduce ? { opacity: 0 } : { opacity: 0, scaleX: 0 },
@@ -153,15 +155,15 @@ export function HeroDesktop() {
             </motion.span>
             <motion.span
               aria-hidden
-              className="absolute border-solid border-white"
+              className="absolute border-solid border-sun"
               style={{ left: dw(720), top: dw(128), width: dw(548.604), height: dw(115.93), borderWidth: dw(21), borderRadius: dw(55), transformOrigin: "left center" }}
               variants={{
                 hidden: reduce ? { opacity: 0 } : { opacity: 0, scaleX: 0.72 },
                 show: { opacity: 1, scaleX: 1, transition: { duration: reduce ? 0.2 : 1.4, delay: 0.2, ease: EASE } },
               }}
             />
-            <span aria-hidden className="absolute" style={{ ...shadow("var(--color-sky)", 902.6, 358), maskPosition: `${dw(-182.604)} ${dw(16.125)}`, WebkitMaskPosition: `${dw(-182.604)} ${dw(16.125)}` }} />
-            <span aria-hidden className="absolute" style={{ ...shadow("var(--color-slate)", 947.6, 230.924), maskPosition: `${dw(-227.679)} ${dw(16.125)}`, WebkitMaskPosition: `${dw(-227.679)} ${dw(16.125)}` }} />
+            <span aria-hidden className="absolute" style={{ ...shadow("var(--color-sun-hot)", 902.6, 358), maskPosition: `${dw(-182.604)} ${dw(16.125)}`, WebkitMaskPosition: `${dw(-182.604)} ${dw(16.125)}` }} />
+            <span aria-hidden className="absolute" style={{ ...shadow("color-mix(in srgb, var(--color-sun-hot) 55%, var(--color-ink))", 947.6, 230.924), maskPosition: `${dw(-227.679)} ${dw(16.125)}`, WebkitMaskPosition: `${dw(-227.679)} ${dw(16.125)}` }} />
           </motion.div>
 
           {/* 8. LEMA */}

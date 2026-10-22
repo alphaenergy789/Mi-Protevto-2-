@@ -2,7 +2,8 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import { SectionBackdrop } from "@/components/ui/SectionBackdrop";
-import { BACKGROUNDS, HERO, MEDIA } from "@/lib/content";
+import { BACKGROUNDS, MEDIA } from "@/lib/content";
+import { useI18n } from "@/lib/i18n";
 import { mw, mpx } from "@/lib/frame";
 import { EASE, stagger } from "@/lib/motion";
 
@@ -11,6 +12,7 @@ const FIGMA_BLUR = 0.5;
 const FS = 64;
 
 export function HeroMobile() {
+  const HERO = useI18n().t.hero;
   const reduce = useReducedMotion() ?? false;
   const rise = (delay = 0, y = 22) => ({
     hidden: reduce ? { opacity: 0 } : { opacity: 0, y },
@@ -20,11 +22,11 @@ export function HeroMobile() {
     hidden: reduce ? { opacity: 0 } : { opacity: 0, y: 26, filter: `blur(${mw(28 * FIGMA_BLUR)})` },
     show: { opacity: 1, y: 0, filter: `blur(0px)`, transition: { duration: reduce ? 0.2 : 1.3, delay, ease: EASE } },
   });
-  const cls = "font-normalidad absolute whitespace-nowrap uppercase text-white";
+  const cls = "font-normalidad absolute whitespace-nowrap uppercase text-hero-type";
   const st = { fontSize: mw(FS), lineHeight: 1.2, letterSpacing: mw(-2.5) };
 
   return (
-    <div className="relative isolate min-h-svh w-full overflow-hidden bg-deep md:hidden">
+    <div className="relative isolate min-h-svh w-full overflow-hidden md:hidden">
       <SectionBackdrop layers={BACKGROUNDS.heroMobile} className="-z-10" />
       <div className="relative flex min-h-svh items-center">
         <motion.div className="frame frame-mobile relative" variants={stagger(reduce, 0.07, 0.15)} initial="hidden" animate="show">
@@ -40,7 +42,7 @@ export function HeroMobile() {
           <motion.span aria-hidden className={cls} style={{ ...st, left: mw(20), top: capTop(120, FS) }} variants={word()}>{HERO.brandParts.alpha}</motion.span>
           <motion.span
             aria-hidden
-            className="absolute border-solid border-white"
+            className="absolute border-solid border-sun"
             style={{ left: mw(312), top: mw(122), width: mw(108), height: mw(44), borderWidth: mw(8), borderRadius: mw(21), transformOrigin: "left center" }}
             variants={{ hidden: reduce ? { opacity: 0 } : { opacity: 0, scaleX: 0.7 }, show: { opacity: 1, scaleX: 1, transition: { duration: 1.2, delay: 0.2, ease: EASE } } }}
           />
