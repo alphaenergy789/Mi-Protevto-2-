@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AlphaEnergi · Energía solar en Miami, Florida</title>
+<meta name="description" content="Instalaciones solares eficientes y sostenibles para hogares y negocios en Miami, Florida.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;700;800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* Colores tomados del logo: negro profundo, naranja solar, verde hoja, azul panel */
+  :root {
+    --bg: #05070a;
+    --bg-soft: #0e1319;
+    --text: #f3f5f7;
+    --muted: #94a0ae;
+    --line: rgba(255, 255, 255, 0.09);
+    --sun: #ff8a1f;
+    --sun-hot: #ff5a14;
+    --leaf: #43c01c;
+    --panel: #2450c8;
+    --font-display: "Sora", system-ui, sans-serif;
+    --font-body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    --logo-big: min(260px, 62vw);
+    --nav-h: 68px;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: var(--nav-h); }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-body); line-height: 1.6; overflow-x: hidden; }
+  h1, h2, h3, .brand { font-family: var(--font-display); letter-spacing: -0.02em; }
+  .wrap { max-width: 1112px; margin-inline: auto; padding-inline: 20px; }
+  a { color: inherit; }
+
+  /* ---------- Barra superior ---------- */
+  header {
+    position: fixed; inset: 0 0 auto 0; height: var(--nav-h); z-index: 20;
+    background: rgba(5, 7, 10, 0.72); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+  header .wrap { height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; font-weight: 700; }
+  #navSlot { width: 44px; height: 44px; flex: none; }   /* el logo vuela hasta aquí */
+  .brand span { opacity: 0; transform: translateX(-6px); transition: opacity 250ms var(--ease-out), transform 250ms var(--ease-out); }
+  header.docked .brand span { opacity: 1; transform: none; }
+  nav { display: flex; align-items: center; gap: 24px; }
+  nav a.l { color: var(--muted); text-decoration: none; font-size: 0.95rem; transition: color 150ms ease; }
+  @media (hover: hover) and (pointer: fine) { nav a.l:hover { color: var(--text); } }
+  @media (max-width: 700px) { nav a.l { display: none; } }
+
+  .btn {
+    display: inline-block; border: 0; cursor: pointer; text-decoration: none; font: inherit; font-weight: 600;
+    background: linear-gradient(135deg, var(--sun), var(--sun-hot)); color: #180a02;
+    padding: 12px 22px; border-radius: 999px;
+    transition: transform 160ms var(--ease-out), box-shadow 160ms var(--ease-out);
+  }
+  .btn.big { padding: 15px 30px; }
+  .btn.ghost { background: transparent; color: var(--text); border: 1px solid var(--line); }
+  @media (hover: hover) and (pointer: fine) {
+    .btn:hover { box-shadow: 0 8px 28px rgba(255, 106, 20, 0.35); }
+    .btn.ghost:hover { box-shadow: none; border-color: rgba(255, 255, 255, 0.3); }
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+
+  /* ---------- Logo animado con el scroll ---------- */
+  #logo {
+    position: fixed; left: 0; top: 0; z-index: 30; pointer-events: none;
+    width: var(--logo-big); height: var(--logo-big);
+    will-change: transform;
+    mix-blend-mode: screen;   /* el fondo negro del JPG desaparece sobre la página */
+  }
+  #logo img { width: 100%; height: 100%; display: block; }
+  #glow {
+    position: absolute; inset: -30%; border-radius: 50%; z-index: -1;
+    background: radial-gradient(closest-side, var(--glow, rgba(255, 138, 31, 0.35)), transparent 70%);
+    transition: background 500ms ease, opacity 300ms ease;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero { padding: calc(var(--nav-h) + 32px) 0 72px; text-align: center; }
+  #logoSlot { width: var(--logo-big); height: var(--logo-big); margin: 0 auto 8px; }
+  .tag { display: inline-flex; gap: 8px; align-items: center; font-size: 0.85rem; color: var(--sun); border: 1px solid rgba(255, 138, 31, 0.35); background: rgba(255, 138, 31, 0.08); padding: 4px 14px; border-radius: 999px; margin-bottom: 20px; }
+  h1 { font-size: clamp(2.3rem, 6.4vw, 4.2rem); line-height: 1.05; font-weight: 800; max-width: 15ch; margin-inline: auto; text-wrap: balance; }
+  h1 em { font-style: normal; color: var(--sun); }
+  .lead { color: var(--muted); max-width: 50ch; margin: 20px auto 30px; font-size: 1.1rem; }
+  .actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .stagger > * { opacity: 0; transform: translateY(12px); animation: rise 500ms var(--ease-out) forwards; }
+  .stagger > *:nth-child(1) { animation-delay: 150ms; }
+  .stagger > *:nth-child(2) { animation-delay: 220ms; }
+  .stagger > *:nth-child(3) { animation-delay: 290ms; }
+  .stagger > *:nth-child(4) { animation-delay: 360ms; }
+  @keyframes rise { to { opacity: 1; transform: none; } }
+
+  .stats { display: flex; justify-content: center; gap: clamp(20px, 6vw, 64px); flex-wrap: wrap; margin-top: 56px; }
+  .stats div { text-align: center; }
+  .stats b { display: block; font-family: var(--font-display); font-size: 1.8rem; color: var(--text); font-variant-numeric: tabular-nums; }
+  .stats small { color: var(--muted); }
+
+  /* ---------- Secciones ---------- */
+  section { padding: 88px 0; }
+  .eyebrow { color: var(--leaf); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 10px; }
+  h2 { font-size: clamp(1.7rem, 4vw, 2.5rem); font-weight: 700; margin-bottom: 12px; text-wrap: balance; }
+  .sub { color: var(--muted); max-width: 54ch; margin-bottom: 44px; }
+
+  .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .card { background: var(--bg-soft); border: 1px solid var(--line); border-radius: 16px; padding: 28px; transition: border-color 200ms ease; }
+  .card h3 { font-size: 1.1rem; margin-bottom: 8px; }
+  .card p { color: var(--muted); font-size: 0.95rem; }
+  .card svg { width: 32px; height: 32px; margin-bottom: 16px; stroke: var(--sun); fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .card.g svg { stroke: var(--leaf); }
+  .card.b svg { stroke: #6f93ff; }
+  @media (hover: hover) and (pointer: fine) { .card:hover { border-color: rgba(255, 138, 31, 0.45); } }
+
+  /* Proceso: aquí el orden sí importa */
+  .steps { display: grid; gap: 0; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); counter-reset: s; border-top: 1px solid var(--line); }
+  .step { padding: 28px 24px 8px 0; position: relative; counter-increment: s; }
+  .step::before { content: counter(s); font-family: var(--font-display); font-weight: 800; font-size: 2.6rem; color: transparent; -webkit-text-stroke: 1px var(--sun); display: block; line-height: 1; margin-bottom: 14px; }
+  .step h3 { font-size: 1.05rem; margin-bottom: 6px; }
+  .step p { color: var(--muted); font-size: 0.93rem; }
+
+  /* Calculadora */
+  .calc { background: var(--bg-soft); border: 1px solid var(--line); border-radius: 22px; padding: clamp(24px, 5vw, 48px); display: grid; gap: 36px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); align-items: center; }
+  label { display: block; color: var(--muted); margin-bottom: 14px; }
+  label b { color: var(--text); font-variant-numeric: tabular-nums; }
+  input[type=range] { width: 100%; accent-color: var(--sun); }
+  .result { text-align: center; }
+  .result small { color: var(--muted); display: block; }
+  .num { font-family: var(--font-display); font-size: clamp(2.4rem, 7vw, 3.5rem); font-weight: 800; color: var(--leaf); font-variant-numeric: tabular-nums; }
+  .bar { height: 10px; border-radius: 999px; background: var(--line); overflow: hidden; margin-top: 14px; }
+  .bar i { display: block; height: 100%; transform-origin: left; transform: scaleX(0.3); background: linear-gradient(90deg, var(--leaf), var(--sun)); transition: transform 300ms var(--ease-out); }
+  .note { color: var(--muted); font-size: 0.8rem; margin-top: 14px; }
+
+  /* Contacto */
+  .contact { display: grid; gap: 32px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  form { display: grid; gap: 14px; }
+  input[type=text], input[type=email], input[type=tel], select, textarea {
+    width: 100%; font: inherit; color: var(--text); background: var(--bg-soft); border: 1px solid var(--line); border-radius: 12px; padding: 13px 14px;
+    transition: border-color 150ms ease;
+  }
+  textarea { min-height: 110px; resize: vertical; }
+  input:focus-visible, select:focus-visible, textarea:focus-visible { outline: none; border-color: var(--sun); }
+  .info p { color: var(--muted); margin-bottom: 14px; }
+  .info b { color: var(--text); display: block; font-weight: 600; }
+  #sent { color: var(--leaf); min-height: 1.5em; font-size: 0.95rem; }
+
+  footer { border-top: 1px solid var(--line); color: var(--muted); font-size: 0.88rem; padding: 32px 0; text-align: center; }
+
+  /* Revelado al hacer scroll: solo se oculta lo que está bajo el pliegue */
+  .reveal { transition: opacity 500ms var(--ease-out), transform 500ms var(--ease-out); }
+  .reveal.pre { opacity: 0; transform: translateY(16px); }
+  .reveal.pre.in { opacity: 1; transform: none; }
+  .grid .reveal:nth-child(2), .steps .reveal:nth-child(2) { transition-delay: 60ms; }
+  .grid .reveal:nth-child(3), .steps .reveal:nth-child(3) { transition-delay: 120ms; }
+  .grid .reveal:nth-child(4), .steps .reveal:nth-child(4) { transition-delay: 180ms; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .stagger > * { animation: fadeOnly 300ms ease forwards; transform: none; }
+    @keyframes fadeOnly { to { opacity: 1; } }
+    .reveal.pre { transform: none; }
+    .reveal { transition: opacity 300ms ease; }
+    .bar i { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<header id="top">
+  <div class="wrap">
+    <a class="brand" href="#inicio" aria-label="AlphaEnergi, inicio"><div id="navSlot"></div><span>AlphaEnergi</span></a>
+    <nav>
+      <a class="l" href="#servicios">Servicios</a>
+      <a class="l" href="#proceso">Proceso</a>
+      <a class="l" href="#ahorro">Ahorro</a>
+      <a class="btn" href="#contacto">Cotizar gratis</a>
+    </nav>
+  </div>
+</header>
+
+<!-- Logo único que se mueve con el scroll -->
+<div id="logo" aria-hidden="true"><div id="glow"></div><img src="logo.jpg" alt="" width="1024" height="1024"></div>
+
+<main>
+  <div class="hero wrap" id="inicio">
+    <div id="logoSlot"></div>
+    <div class="stagger">
+      <div class="tag">📍 Miami, Florida</div>
+      <h1>Energía solar para tu <em>hogar</em></h1>
+      <p class="lead">Instalaciones solares eficientes y sostenibles. Producimos tu propia energía y bajamos tu factura de luz.</p>
+      <div class="actions">
+        <a class="btn big" href="#contacto">Pedir cotización</a>
+        <a class="btn big ghost" href="#ahorro">Calcular mi ahorro</a>
+      </div>
+    </div>
+    <div class="stats reveal">
+      <div><b>25 años</b><small>de garantía en paneles</small></div>
+      <div><b>+300</b><small>sistemas instalados</small></div>
+      <div><b>24 h</b><small>respuesta a tu consulta</small></div>
+    </div>
+  </div>
+
+  <section id="servicios" data-glow="rgba(255,138,31,0.35)">
+    <div class="wrap">
+      <div class="eyebrow reveal">Servicios</div>
+      <h2 class="reveal">Todo para pasarte a la energía solar</h2>
+      <p class="sub reveal">Diseñamos, instalamos y cuidamos tu sistema. Tú solo ves bajar la factura.</p>
+      <div class="grid">
+        <article class="card reveal"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg><h3>Solar residencial</h3><p>Paneles en el techo de tu casa, dimensionados según tu consumo real.</p></article>
+        <article class="card g reveal"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M8 7h2M14 7h2M8 11h2M14 11h2M8 15h2M14 15h2"/></svg><h3>Comercial</h3><p>Reduce los costos operativos de tu negocio con generación propia.</p></article>
+        <article class="card b reveal"><svg viewBox="0 0 24 24"><rect x="3" y="8" width="16" height="9" rx="2"/><path d="M21 11v3"/><path d="M11 10l-2 3h3l-2 3"/></svg><h3>Baterías</h3><p>Guarda energía para la noche y mantén la luz cuando falla la red.</p></article>
+        <article class="card reveal"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.4 2.4-2.6-.6-.6-2.6z"/></svg><h3>Mantenimiento</h3><p>Limpieza, revisión y monitoreo para que tu sistema rinda al máximo.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section id="proceso" data-glow="rgba(67,192,28,0.32)">
+    <div class="wrap">
+      <div class="eyebrow reveal">Cómo trabajamos</div>
+      <h2 class="reveal">De la visita a la primera factura baja</h2>
+      <p class="sub reveal">Cuatro pasos claros y sin sorpresas.</p>
+      <div class="steps">
+        <div class="step reveal"><h3>Visita y análisis</h3><p>Revisamos tu techo y tu factura de luz.</p></div>
+        <div class="step reveal"><h3>Diseño y propuesta</h3><p>Te presentamos el sistema, el costo y el ahorro estimado.</p></div>
+        <div class="step reveal"><h3>Permisos</h3><p>Gestionamos los permisos del condado y la compañía eléctrica.</p></div>
+        <div class="step reveal"><h3>Instalación</h3><p>Instalamos y activamos tu sistema en pocos días.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="ahorro" data-glow="rgba(36,80,200,0.4)">
+    <div class="wrap">
+      <div class="eyebrow reveal">Calculadora</div>
+      <h2 class="reveal">¿Cuánto podrías ahorrar?</h2>
+      <p class="sub reveal">Mueve el control con tu factura mensual de luz.</p>
+      <div class="calc reveal">
+        <div>
+          <label for="bill">Factura mensual: <b id="billOut">$180</b></label>
+          <input id="bill" type="range" min="50" max="600" step="10" value="180">
+        </div>
+        <div class="result">
+          <small>Ahorro estimado al año</small>
+          <div class="num" id="saving">$0</div>
+          <div class="bar" aria-hidden="true"><i id="bar"></i></div>
+          <p class="note">Estimación de ejemplo (70 %). La cifra real depende de tu techo y consumo.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contacto" data-glow="rgba(255,138,31,0.35)">
+    <div class="wrap">
+      <div class="eyebrow reveal">Contacto</div>
+      <h2 class="reveal">Pide tu cotización gratis</h2>
+      <p class="sub reveal">Cuéntanos de tu casa o negocio y te respondemos en 24 horas.</p>
+      <div class="contact">
+        <form id="form" class="reveal">
+          <input id="name" type="text" placeholder="Nombre" autocomplete="name" required>
+          <input id="phone" type="tel" placeholder="Teléfono o WhatsApp" autocomplete="tel" required>
+          <input id="email" type="email" placeholder="Correo electrónico" autocomplete="email">
+          <select id="type"><option>Casa</option><option>Negocio</option></select>
+          <textarea id="msg" placeholder="Cuéntanos qué necesitas"></textarea>
+          <button class="btn big" type="submit">Enviar consulta</button>
+          <div id="sent" role="status"></div>
+        </form>
+        <div class="info reveal">
+          <p><b>Zona de servicio</b>Miami-Dade y alrededores, Florida</p>
+          <p><b>Teléfono</b>(305) 000-0000 <small>(ejemplo)</small></p>
+          <p><b>Correo</b>info@alphaenergi.com <small>(ejemplo)</small></p>
+          <p><b>Licencia</b>Pendiente de agregar</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap">© 2026 AlphaEnergi · Miami, Florida</div></footer>
+
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const logo = document.getElementById('logo');
+  const glow = document.getElementById('glow');
+  const slot = document.getElementById('logoSlot');
+  const navSlot = document.getElementById('navSlot');
+  const header = document.getElementById('top');
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+
+  let big, small, startX, startDocY, endX, endY, range;
+  function measure() {
+    const s = slot.getBoundingClientRect();
+    const n = navSlot.getBoundingClientRect();
+    big = s.width;
+    small = n.width;
+    startX = s.left + s.width / 2;
+    startDocY = s.top + scrollY + s.height / 2;
+    endX = n.left + n.width / 2;
+    endY = n.top + n.height / 2;
+    range = Math.max(160, startDocY - endY);
+  }
+
+  let tilt = 0, lastY = scrollY, ticking = false;
+  function draw() {
+    ticking = false;
+    const y = scrollY;
+    const p = clamp(y / range, 0, 1);
+    const e = easeOut(p);
+    const cx = lerp(startX, endX, e);
+    const cy = lerp(startDocY - y, endY, e);
+    const size = lerp(big, small, e);
+    const scale = size / big;
+    // gira una vuelta mientras viaja a la barra; después se inclina según la velocidad del scroll
+    const spin = reduce ? 0 : (1 - e) * -360;
+    const v = y - lastY; lastY = y;
+    tilt = reduce ? 0 : lerp(tilt, clamp(v * 0.6, -14, 14), 0.25);
+    logo.style.transform = `translate3d(${cx - big / 2}px, ${cy - big / 2}px, 0) rotate(${spin + tilt}deg) scale(${scale})`;
+    glow.style.opacity = String(1 - e * 0.55);
+    header.classList.toggle('docked', p > 0.92);
+    if (!reduce && Math.abs(tilt) > 0.05) requestAnimationFrame(schedule);   // deja que la inclinación vuelva a 0
+  }
+  function schedule() { if (!ticking) { ticking = true; requestAnimationFrame(draw); } }
+  addEventListener('scroll', schedule, { passive: true });
+  addEventListener('resize', () => { measure(); schedule(); });
+  measure(); draw();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { measure(); draw(); });
+
+  // El resplandor del logo cambia de color según la sección
+  const sections = document.querySelectorAll('[data-glow]');
+  const so = new IntersectionObserver((entries) => {
+    entries.forEach((en) => { if (en.isIntersecting) glow.style.setProperty('--glow', en.target.dataset.glow); });
+  }, { rootMargin: '-45% 0px -45% 0px' });
+  sections.forEach((s) => so.observe(s));
+
+  // Revelado al hacer scroll (solo lo que queda bajo el pliegue)
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+  }, { rootMargin: '0px 0px -60px 0px' });
+  document.querySelectorAll('.reveal').forEach((el) => {
+    if (el.getBoundingClientRect().top > innerHeight) { el.classList.add('pre'); io.observe(el); }
+  });
+
+  // Calculadora
+  const bill = document.getElementById('bill');
+  const nf = new Intl.NumberFormat('en-US');
+  function calc() {
+    const v = +bill.value;
+    document.getElementById('billOut').textContent = '$' + v;
+    document.getElementById('saving').textContent = '$' + nf.format(Math.round(v * 12 * 0.7));
+    document.getElementById('bar').style.transform = `scaleX(${0.1 + (v - 50) / 550 * 0.9})`;
+  }
+  bill.addEventListener('input', calc); calc();
+
+  // Formulario (demostración: aún no envía datos a ningún lado)
+  document.getElementById('form').addEventListener('submit', (ev) => {
+    ev.preventDefault();
+    document.getElementById('sent').textContent = 'Gracias. Esto es una demostración: el envío real se conecta al publicar.';
+  });
+})();
+</script>
+</body>
+</html>
