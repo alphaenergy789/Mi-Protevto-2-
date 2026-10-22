@@ -201,7 +201,7 @@
     <nav>
       <a class="l" href="#servicios" data-i18n="nav.services">Servicios</a>
       <a class="l" href="#victron">Victron</a>
-      <a class="l" href="#ahorro" data-i18n="nav.savings">Ahorro</a>
+      <a class="l" href="calculadora.html" data-i18n="nav.savings">Calculadora</a>
       <a class="l" href="#contacto" data-i18n="nav.contact">Contacto</a>
       <div class="tools">
         <button class="chip" id="langBtn" type="button" aria-label="Cambiar idioma / Change language">EN</button>
@@ -312,6 +312,7 @@
           <div class="num" id="saving">$0</div>
           <div class="bar" aria-hidden="true"><i id="bar"></i></div>
           <p class="note" data-i18n="calc.note">Estimación de ejemplo (70 %). La cifra real depende de tu techo y tu consumo.</p>
+          <a class="btn" style="margin-top:16px" href="calculadora.html" data-i18n="calc.full">Calculadora completa →</a>
         </div>
       </div>
     </div>
@@ -358,7 +359,7 @@
   /* ---------- Idioma ---------- */
   const T = {
     es: {
-      'nav.services': 'Servicios', 'nav.savings': 'Ahorro', 'nav.contact': 'Contacto', 'nav.quote': 'Cotizar gratis',
+      'nav.services': 'Servicios', 'nav.savings': 'Calculadora', 'nav.contact': 'Contacto', 'nav.quote': 'Cotizar gratis',
       'hero.tag': 'Distribuidor autorizado Victron Energy · Miami, Florida',
       'hero.title': 'Energía solar y respaldo para tu <em>hogar</em>',
       'hero.lead': 'Instalaciones solares eficientes y sostenibles, con inversores, controladores y baterías Victron Energy.',
@@ -380,7 +381,7 @@
       'proc.3t': 'Permisos', 'proc.3p': 'Gestionamos los permisos del condado y de la compañía eléctrica.',
       'proc.4t': 'Instalación', 'proc.4p': 'Instalamos y activamos tu sistema.',
       'calc.eyebrow': 'Calculadora', 'calc.title': '¿Cuánto podrías ahorrar?', 'calc.sub': 'Mueve el control con tu factura mensual de luz.',
-      'calc.bill': 'Factura mensual', 'calc.year': 'Ahorro estimado al año', 'calc.note': 'Estimación de ejemplo (70 %). La cifra real depende de tu techo y tu consumo.',
+      'calc.bill': 'Factura mensual', 'calc.year': 'Ahorro estimado al año', 'calc.note': 'Estimación de ejemplo (70 %). La cifra real depende de tu techo y tu consumo.', 'calc.full': 'Calculadora completa →',
       'ct.eyebrow': 'Contacto', 'ct.title': 'Pide tu cotización gratis', 'ct.sub': 'Cuéntanos de tu casa o negocio y te respondemos pronto.',
       'ct.name': 'Nombre', 'ct.phone': 'Teléfono o WhatsApp', 'ct.email': 'Correo electrónico', 'ct.home': 'Casa', 'ct.biz': 'Negocio', 'ct.msg': 'Cuéntanos qué necesitas',
       'ct.send': 'Enviar por correo', 'ct.sent': 'Se abrirá tu programa de correo con el mensaje listo para enviar.',
@@ -389,7 +390,7 @@
       'foot.auth': 'Distribuidor autorizado Victron Energy', 'mail.subject': 'Cotización solar', 'mail.type': 'Tipo', 'mail.phone': 'Teléfono'
     },
     en: {
-      'nav.services': 'Services', 'nav.savings': 'Savings', 'nav.contact': 'Contact', 'nav.quote': 'Free quote',
+      'nav.services': 'Services', 'nav.savings': 'Calculator', 'nav.contact': 'Contact', 'nav.quote': 'Free quote',
       'hero.tag': 'Authorized Victron Energy dealer · Miami, Florida',
       'hero.title': 'Solar power and backup for your <em>home</em>',
       'hero.lead': 'Efficient, sustainable solar installations with Victron Energy inverters, charge controllers and batteries.',
@@ -411,7 +412,7 @@
       'proc.3t': 'Permits', 'proc.3p': 'We handle county and utility permits.',
       'proc.4t': 'Installation', 'proc.4p': 'We install and activate your system.',
       'calc.eyebrow': 'Calculator', 'calc.title': 'How much could you save?', 'calc.sub': 'Move the slider to your monthly power bill.',
-      'calc.bill': 'Monthly bill', 'calc.year': 'Estimated savings per year', 'calc.note': 'Example estimate (70%). Actual savings depend on your roof and usage.',
+      'calc.bill': 'Monthly bill', 'calc.year': 'Estimated savings per year', 'calc.note': 'Example estimate (70%). Actual savings depend on your roof and usage.', 'calc.full': 'Full calculator →',
       'ct.eyebrow': 'Contact', 'ct.title': 'Request your free quote', 'ct.sub': 'Tell us about your home or business and we will get back to you soon.',
       'ct.name': 'Name', 'ct.phone': 'Phone or WhatsApp', 'ct.email': 'Email', 'ct.home': 'Home', 'ct.biz': 'Business', 'ct.msg': 'Tell us what you need',
       'ct.send': 'Send by email', 'ct.sent': 'Your email app will open with the message ready to send.',
