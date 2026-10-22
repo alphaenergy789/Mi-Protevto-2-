@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SolarLuz · Energía del sol para tu casa</title>
+<meta name="description" content="Paneles solares para tu hogar: ahorra en tu factura y reduce tu huella de carbono.">
+<style>
+  :root {
+    --bg: #0b1220;
+    --bg-soft: #121b2e;
+    --text: #f4f6fb;
+    --muted: #9aa7c0;
+    --sun: #ffb62e;
+    --sun-deep: #ff8a1f;
+    --panel: #1d4ed8;
+    --line: rgba(255, 255, 255, 0.08);
+    /* Curvas de Emil Kowalski: las nativas son demasiado débiles */
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  .wrap { width: min(1080px, 100% - 32px); margin-inline: auto; }
+
+  /* ---------- Nav ---------- */
+  nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; }
+  .logo { font-weight: 700; letter-spacing: -0.02em; display: flex; align-items: center; gap: 8px; }
+  .logo i { width: 14px; height: 14px; border-radius: 50%; background: var(--sun); box-shadow: 0 0 14px var(--sun); }
+  nav a.link { color: var(--muted); text-decoration: none; font-size: 0.95rem; transition: color 150ms ease; }
+  @media (hover: hover) and (pointer: fine) { nav a.link:hover { color: var(--text); } }
+
+  /* ---------- Botón: feedback al presionar ---------- */
+  .btn {
+    display: inline-block; border: 0; cursor: pointer; text-decoration: none;
+    background: linear-gradient(135deg, var(--sun), var(--sun-deep));
+    color: #1a1204; font: inherit; font-weight: 600;
+    padding: 14px 26px; border-radius: 999px;
+    transition: transform 160ms var(--ease-out), box-shadow 160ms var(--ease-out);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .btn:hover { box-shadow: 0 8px 28px rgba(255, 150, 30, 0.35); }
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+
+  /* ---------- Hero ---------- */
+  .hero { position: relative; padding: 56px 0 96px; text-align: center; }
+  .sun-wrap { position: relative; width: 140px; height: 140px; margin: 0 auto 32px; }
+  .sun {
+    position: absolute; inset: 30px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #ffe08a, var(--sun) 55%, var(--sun-deep));
+    box-shadow: 0 0 60px rgba(255, 170, 40, 0.55);
+    animation: pulse 4s ease-in-out infinite;
+  }
+  .rays { position: absolute; inset: 0; animation: spin 40s linear infinite; }
+  .rays span {
+    position: absolute; left: 50%; top: 0; width: 3px; height: 18px; margin-left: -1.5px;
+    border-radius: 2px; background: var(--sun); transform-origin: 50% 70px; opacity: 0.8;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes pulse { 50% { transform: scale(1.06); } }
+
+  h1 { font-size: clamp(2.2rem, 6vw, 4rem); letter-spacing: -0.03em; line-height: 1.1; max-width: 16ch; margin-inline: auto; }
+  h1 em { font-style: normal; background: linear-gradient(135deg, var(--sun), var(--sun-deep)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .hero p.lead { color: var(--muted); max-width: 48ch; margin: 20px auto 32px; font-size: 1.1rem; }
+
+  /* Entrada escalonada (30-80ms entre elementos, ease-out) */
+  .stagger > * {
+    opacity: 0; transform: translateY(12px);
+    animation: rise 500ms var(--ease-out) forwards;
+  }
+  .stagger > *:nth-child(1) { animation-delay: 0ms; }
+  .stagger > *:nth-child(2) { animation-delay: 70ms; }
+  .stagger > *:nth-child(3) { animation-delay: 140ms; }
+  .stagger > *:nth-child(4) { animation-delay: 210ms; }
+  @keyframes rise { to { opacity: 1; transform: none; } }
+
+  /* ---------- Paneles ---------- */
+  .panels {
+    display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px;
+    width: min(520px, 100%); margin: 56px auto 0;
+    transform: perspective(700px) rotateX(38deg);
+  }
+  .cell {
+    aspect-ratio: 1.3; border-radius: 4px;
+    background:
+      linear-gradient(var(--line) 1px, transparent 1px) 0 0 / 100% 50%,
+      linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0 / 33.33% 100%,
+      linear-gradient(160deg, #2a5be8, #14308f);
+    opacity: 0; transform: scale(0.95);
+    animation: cellIn 450ms var(--ease-out) forwards, glint 6s ease-in-out infinite;
+    animation-delay: calc(var(--i) * 35ms + 400ms), calc(var(--i) * 120ms + 1.5s);
+  }
+  @keyframes cellIn { to { opacity: 1; transform: scale(1); } }
+  @keyframes glint { 0%, 85%, 100% { filter: brightness(1); } 92% { filter: brightness(1.5); } }
+
+  /* ---------- Revelado al hacer scroll ---------- */
+  .reveal { opacity: 0; transform: translateY(16px); transition: opacity 500ms var(--ease-out), transform 500ms var(--ease-out); }
+  .reveal.in { opacity: 1; transform: none; }
+  .grid .reveal:nth-child(2) { transition-delay: 60ms; }
+  .grid .reveal:nth-child(3) { transition-delay: 120ms; }
+
+  section { padding: 72px 0; }
+  h2 { font-size: clamp(1.6rem, 4vw, 2.3rem); letter-spacing: -0.02em; margin-bottom: 12px; }
+  .sub { color: var(--muted); max-width: 52ch; margin-bottom: 40px; }
+
+  .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .card {
+    background: var(--bg-soft); border: 1px solid var(--line); border-radius: 18px; padding: 28px;
+  }
+  .card .ico { font-size: 1.8rem; margin-bottom: 12px; }
+  .card h3 { font-size: 1.15rem; margin-bottom: 6px; }
+  .card p { color: var(--muted); font-size: 0.96rem; }
+  /* hover solo en dispositivos con puntero; las tarjetas no son pulsables, así que solo un cambio sutil de borde */
+  .card { transition: border-color 200ms ease; }
+  @media (hover: hover) and (pointer: fine) { .card:hover { border-color: rgba(255, 182, 46, 0.5); } }
+
+  /* ---------- Calculadora ---------- */
+  .calc { background: var(--bg-soft); border: 1px solid var(--line); border-radius: 24px; padding: clamp(24px, 5vw, 48px); display: grid; gap: 32px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); align-items: center; }
+  label { display: block; color: var(--muted); margin-bottom: 12px; }
+  label b { color: var(--text); font-variant-numeric: tabular-nums; }
+  input[type=range] { width: 100%; accent-color: var(--sun); }
+  .result { text-align: center; }
+  .result .num { font-size: clamp(2.4rem, 7vw, 3.6rem); font-weight: 700; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; color: var(--sun); }
+  .result small { color: var(--muted); display: block; }
+  .bar { height: 10px; border-radius: 999px; background: var(--line); overflow: hidden; margin-top: 16px; }
+  .bar i { display: block; height: 100%; width: 100%; transform-origin: left; transform: scaleX(0.5); background: linear-gradient(90deg, var(--sun), var(--sun-deep)); transition: transform 300ms var(--ease-out); }
+
+  /* ---------- CTA / pie ---------- */
+  .cta { text-align: center; }
+  footer { color: var(--muted); text-align: center; padding: 40px 0; font-size: 0.9rem; border-top: 1px solid var(--line); }
+
+  /* Movimiento reducido: sin transformaciones, solo fundidos */
+  @media (prefers-reduced-motion: reduce) {
+    .rays, .sun, .cell { animation: none; }
+    .cell { opacity: 1; transform: none; }
+    .stagger > * { animation: fadeOnly 300ms ease forwards; transform: none; }
+    .reveal { transform: none; transition: opacity 300ms ease; }
+    @keyframes fadeOnly { to { opacity: 1; } }
+    .bar i { transition: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <div class="logo"><i></i> SolarLuz</div>
+    <a class="link" href="#calculadora">Calcula tu ahorro</a>
+  </nav>
+
+  <header class="hero">
+    <div class="sun-wrap" aria-hidden="true">
+      <div class="rays" id="rays"></div>
+      <div class="sun"></div>
+    </div>
+    <div class="stagger">
+      <h1>Convierte el sol en <em>ahorro</em> para tu casa</h1>
+      <p class="lead">Paneles solares de alta eficiencia, instalados en pocos días y con garantía de 25 años.</p>
+      <a class="btn" href="#calculadora">Calcular mi ahorro</a>
+    </div>
+    <div class="panels" id="panels" aria-hidden="true"></div>
+  </header>
+
+  <section>
+    <h2 class="reveal">Por qué elegir energía solar</h2>
+    <p class="sub reveal">Menos factura, más independencia y un planeta más limpio.</p>
+    <div class="grid">
+      <article class="card reveal"><div class="ico">💡</div><h3>Factura más baja</h3><p>Reduce hasta un 70 % tu gasto eléctrico desde el primer mes.</p></article>
+      <article class="card reveal"><div class="ico">🌱</div><h3>Energía limpia</h3><p>Cada instalación evita toneladas de CO₂ al año.</p></article>
+      <article class="card reveal"><div class="ico">🔧</div><h3>Sin complicaciones</h3><p>Nos encargamos del diseño, permisos e instalación.</p></article>
+    </div>
+  </section>
+
+  <section id="calculadora">
+    <h2 class="reveal">Calcula cuánto puedes ahorrar</h2>
+    <p class="sub reveal">Mueve el control con tu factura mensual de luz.</p>
+    <div class="calc reveal">
+      <div>
+        <label for="bill">Factura mensual: <b id="billOut">80 €</b></label>
+        <input id="bill" type="range" min="20" max="300" step="5" value="80">
+      </div>
+      <div class="result">
+        <small>Ahorro estimado al año</small>
+        <div class="num" id="saving">0 €</div>
+        <div class="bar" aria-hidden="true"><i id="bar"></i></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <h2 class="reveal">¿Listo para dar el paso?</h2>
+    <p class="sub reveal" style="margin-inline:auto">Pide un presupuesto gratuito y sin compromiso.</p>
+    <a class="btn reveal" href="mailto:hola@solarluz.example">Pedir presupuesto</a>
+  </section>
+</div>
+<footer>© 2026 SolarLuz · Hecho con energía del sol</footer>
+
+<script>
+  // Rayos del sol
+  const rays = document.getElementById('rays');
+  for (let i = 0; i < 16; i++) {
+    const s = document.createElement('span');
+    s.style.transform = `rotate(${i * 22.5}deg)`;
+    rays.appendChild(s);
+  }
+
+  // Celdas del panel (con retardo escalonado)
+  const panels = document.getElementById('panels');
+  for (let i = 0; i < 24; i++) {
+    const c = document.createElement('div');
+    c.className = 'cell';
+    c.style.setProperty('--i', (i % 6) + Math.floor(i / 6));
+    panels.appendChild(c);
+  }
+
+  // Revelado al entrar en pantalla (una sola vez)
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { rootMargin: '0px 0px -80px 0px' });
+  document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+
+  // Calculadora: la barra anima con transform; el número se actualiza al instante
+  const bill = document.getElementById('bill');
+  const billOut = document.getElementById('billOut');
+  const saving = document.getElementById('saving');
+  const bar = document.getElementById('bar');
+  const nf = new Intl.NumberFormat('es-ES');
+  function update() {
+    const v = +bill.value;
+    const yearly = Math.round(v * 12 * 0.7);
+    billOut.textContent = v + ' €';
+    saving.textContent = nf.format(yearly) + ' €';
+    bar.style.transform = `scaleX(${(v - 20) / 280 * 0.9 + 0.1})`;
+  }
+  bill.addEventListener('input', update);
+  update();
+</script>
+</body>
+</html>
